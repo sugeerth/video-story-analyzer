@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+
+# Data (large video files and generated HTML reports)
+data/*.mp4
+data/*.webm
+data/*.mkv
+data/*_analysis.html
+
+# Generated Sankey outputs
+sankey_detection.html
+sankey_realvideo.html
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# PyTorch model cache
+*.pth
+*.pt

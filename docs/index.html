@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Story Analyzer — AI-Powered Object Detection &amp; Narrative Visualization</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#333;line-height:1.6}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0d47a1 0%,#1565c0 40%,#1976d2 70%,#42a5f5 100%);color:#fff;padding:60px 24px 50px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 60%);animation:drift 20s linear infinite}
+@keyframes drift{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;margin-bottom:8px;letter-spacing:-.5px}
+.hero .tagline{font-size:clamp(14px,2.5vw,18px);opacity:.85;max-width:650px;margin:0 auto 24px}
+.hero-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.hero-badge{background:rgba(255,255,255,.15);backdrop-filter:blur(8px);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.2)}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:#fff;color:#0d47a1;border-radius:30px;font-size:16px;font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+
+/* Architecture */
+.arch{background:#f8f9fa;padding:48px 24px;text-align:center}
+.arch h2{font-size:24px;font-weight:700;margin-bottom:8px}
+.arch .sub{color:#666;margin-bottom:32px;font-size:14px}
+.arch-diagram{max-width:800px;margin:0 auto;background:#fff;border-radius:12px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08);font-family:'Courier New',monospace;font-size:14px;line-height:1.8;text-align:left;overflow-x:auto}
+.arch-diagram .layer{display:flex;align-items:center;gap:12px;margin:4px 0}
+.arch-diagram .mod{background:#e3f2fd;padding:4px 14px;border-radius:6px;font-weight:600;color:#1565c0;white-space:nowrap}
+.arch-diagram .arrow{color:#999;font-size:18px}
+.arch-diagram .fusion{background:#fff3e0;padding:4px 14px;border-radius:6px;font-weight:600;color:#e65100}
+.arch-diagram .output{background:#e8f5e9;padding:4px 14px;border-radius:6px;font-weight:600;color:#2e7d32}
+
+/* Features */
+.features{padding:48px 24px;max-width:1100px;margin:0 auto}
+.features h2{text-align:center;font-size:24px;font-weight:700;margin-bottom:32px}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.feat-card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:24px;transition:all .2s}
+.feat-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.1);transform:translateY(-3px)}
+.feat-icon{font-size:32px;margin-bottom:10px}
+.feat-card h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.feat-card p{font-size:13px;color:#666;line-height:1.5}
+
+/* Pipeline */
+.pipeline{background:#f0f4f8;padding:48px 24px}
+.pipeline h2{text-align:center;font-size:24px;font-weight:700;margin-bottom:32px}
+.pipeline-steps{display:flex;gap:0;max-width:1000px;margin:0 auto;overflow-x:auto;padding-bottom:8px}
+.pipe-step{flex:1;min-width:130px;text-align:center;position:relative;padding:0 8px}
+.pipe-step::after{content:'\2192';position:absolute;right:-8px;top:18px;font-size:20px;color:#90a4ae}
+.pipe-step:last-child::after{display:none}
+.pipe-num{width:40px;height:40px;border-radius:50%;background:#1976d2;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;margin-bottom:8px}
+.pipe-step h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:#333;margin-bottom:4px}
+.pipe-step p{font-size:11px;color:#777;line-height:1.4}
+
+/* Demo */
+.demo{padding:48px 24px;text-align:center;background:#fff}
+.demo h2{font-size:24px;font-weight:700;margin-bottom:8px}
+.demo .sub{color:#666;font-size:14px;margin-bottom:24px}
+.demo-sankey{max-width:900px;margin:0 auto;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+.demo-sankey-placeholder{background:linear-gradient(135deg,#fafafa,#f0f0f0);padding:40px 20px;position:relative}
+.sankey-svg{width:100%;max-width:850px;height:auto}
+
+/* Quick start */
+.quickstart{background:#1a1a2e;color:#fff;padding:48px 24px}
+.quickstart h2{text-align:center;font-size:24px;font-weight:700;margin-bottom:24px}
+.qs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;max-width:900px;margin:0 auto}
+.qs-block{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:20px;overflow:hidden}
+.qs-block h3{font-size:13px;font-weight:600;color:#82b1ff;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.qs-code{background:#0d0d1a;border-radius:6px;padding:14px 16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;overflow-x:auto;color:#e0e0e0}
+.qs-code .cmd{color:#69f0ae}.qs-code .comment{color:#616161}.qs-code .url{color:#82b1ff}
+
+/* Tech stack */
+.stack{padding:40px 24px;background:#f8f9fa;text-align:center}
+.stack h2{font-size:24px;font-weight:700;margin-bottom:24px}
+.stack-logos{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;max-width:700px;margin:0 auto}
+.stack-item{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:#555}
+
+/* Footer */
+.footer{background:#0d47a1;color:rgba(255,255,255,.8);padding:24px;text-align:center;font-size:12px}
+.footer a{color:#82b1ff;text-decoration:none}
+.footer a:hover{color:#fff}
+
+/* Story phases bar */
+.story-bar{display:flex;max-width:700px;margin:20px auto 0;border-radius:8px;overflow:hidden;height:36px}
+.story-phase{flex:1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.3px;color:#fff;transition:flex .3s}
+.story-phase:hover{flex:1.5}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Video Story Analyzer</h1>
+  <div class="tagline">AI-powered object detection and narrative visualization for any video. Detects 80+ object types, tells the story, and builds interactive Sankey flow diagrams.</div>
+  <div class="hero-badges">
+    <span class="hero-badge">Faster R-CNN (ResNet50-FPN)</span>
+    <span class="hero-badge">80+ COCO Object Classes</span>
+    <span class="hero-badge">Multi-Modal Ensemble</span>
+    <span class="hero-badge">Interactive Sankey Visualization</span>
+  </div>
+  <a href="https://github.com/fullfocus/video-story-analyzer" class="hero-cta">View on GitHub</a>
+
+  <div class="story-bar">
+    <div class="story-phase" style="background:#1976d2">OPENING</div>
+    <div class="story-phase" style="background:#f9a825;color:#333">RISING</div>
+    <div class="story-phase" style="background:#d32f2f;flex:1.3">CLIMAX</div>
+    <div class="story-phase" style="background:#7b1fa2">FALLING</div>
+    <div class="story-phase" style="background:#388e3c">RESOLUTION</div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<div class="arch">
+  <h2>Multi-Modal Architecture</h2>
+  <div class="sub">Three specialized neural networks fused through learned gated attention</div>
+  <div class="arch-diagram">
+    <div class="layer"><span class="mod">CNN (ResNet50)</span> <span class="arrow">&mdash;&mdash;&rArr;</span> <span>Visual features (2048 &rarr; 256D)</span></div>
+    <div class="layer"><span class="mod">LSTM (BiLSTM)</span> <span class="arrow">&mdash;&mdash;&rArr;</span> <span>Temporal features with attention (256D)</span></div>
+    <div class="layer"><span class="mod">OCR (Tesseract)</span> <span class="arrow">&mdash;&mdash;&rArr;</span> <span>Text features (char-level, 128D)</span></div>
+    <div style="text-align:center;padding:8px 0;color:#999;font-size:16px">&darr;&darr;&darr;</div>
+    <div class="layer"><span class="fusion">Gated Attention Fusion</span> <span class="arrow">&mdash;&rArr;</span> <span class="output">Classifier (F1: 82.2%)</span></div>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="features">
+  <h2>Features</h2>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">&#128270;</div>
+      <h3>Real-Time Object Detection</h3>
+      <p>Faster R-CNN with ResNet50-FPN backbone detects 80+ COCO object classes in every video frame with confidence scoring and bounding box visualization.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#128200;</div>
+      <h3>Adaptive Sankey Diagrams</h3>
+      <p>Object detection flow is visualized as an interactive Sankey diagram where busy segments expand and quiet ones contract, revealing the video's rhythmic structure.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#127916;</div>
+      <h3>Story Arc Extraction</h3>
+      <p>Automatic narrative analysis identifies Opening, Rising Action, Climax, Falling Action, and Resolution phases based on detection density and object dynamics.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#128202;</div>
+      <h3>Object Sentiment Tracking</h3>
+      <p>Per-object trends (rising, falling, peaked, stable) with sparkline visualizations for both detection frequency and confidence over time.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#127760;</div>
+      <h3>YouTube Integration</h3>
+      <p>Paste any YouTube URL &mdash; the tool downloads, trims to 60s, extracts frames, and generates a full interactive HTML analysis dashboard.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#9889;</div>
+      <h3>Interactive Dashboards</h3>
+      <p>Self-contained HTML reports with embedded video player, clickable timeline, hover frame galleries, and synchronized Sankey-to-video navigation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Pipeline -->
+<div class="pipeline">
+  <h2>Analysis Pipeline</h2>
+  <div class="pipeline-steps">
+    <div class="pipe-step">
+      <div class="pipe-num">1</div>
+      <h4>Input</h4>
+      <p>YouTube URL or local video file</p>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-num">2</div>
+      <h4>Extract</h4>
+      <p>Sample every Nth frame via OpenCV</p>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-num">3</div>
+      <h4>Detect</h4>
+      <p>Faster R-CNN per-frame object detection</p>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-num">4</div>
+      <h4>Segment</h4>
+      <p>Adaptive density-based time segments</p>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-num">5</div>
+      <h4>Analyze</h4>
+      <p>Story arc + sentiment + trends</p>
+    </div>
+    <div class="pipe-step">
+      <div class="pipe-num">6</div>
+      <h4>Visualize</h4>
+      <p>Interactive Sankey HTML dashboard</p>
+    </div>
+  </div>
+</div>
+
+<!-- Demo Sankey SVG -->
+<div class="demo">
+  <h2>Adaptive Sankey Visualization</h2>
+  <div class="sub">Object detection flow across time &mdash; wider segments = more activity</div>
+  <div class="demo-sankey">
+    <div class="demo-sankey-placeholder">
+      <svg class="sankey-svg" viewBox="0 0 850 320" xmlns="http://www.w3.org/2000/svg">
+        <!-- Segment labels -->
+        <text x="70" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#555">T1 Opening</text>
+        <text x="230" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#555">T2 Rising</text>
+        <text x="420" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#555">T3 Climax</text>
+        <text x="600" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#555">T4 Falling</text>
+        <text x="750" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="#555">T5 Resolution</text>
+
+        <!-- T1 nodes -->
+        <rect x="50" y="35" width="16" height="70" rx="3" fill="#2979FF" opacity="0.85"/>
+        <text x="72" y="75" font-size="9" fill="#333">person (15)</text>
+        <rect x="50" y="115" width="16" height="50" rx="3" fill="#00C853" opacity="0.85"/>
+        <text x="72" y="145" font-size="9" fill="#333">car (8)</text>
+        <rect x="50" y="175" width="16" height="30" rx="3" fill="#FF6D00" opacity="0.85"/>
+        <text x="72" y="195" font-size="9" fill="#333">truck (5)</text>
+        <rect x="50" y="215" width="16" height="25" rx="3" fill="#B0BEC5" opacity="0.85"/>
+        <text x="72" y="232" font-size="9" fill="#999">other (3)</text>
+
+        <!-- T2 nodes -->
+        <rect x="210" y="30" width="16" height="85" rx="3" fill="#2979FF" opacity="0.85"/>
+        <text x="232" y="78" font-size="9" fill="#333">person (22)</text>
+        <rect x="210" y="125" width="16" height="60" rx="3" fill="#00C853" opacity="0.85"/>
+        <text x="232" y="160" font-size="9" fill="#333">car (12)</text>
+        <rect x="210" y="195" width="16" height="35" rx="3" fill="#D50000" opacity="0.85"/>
+        <text x="232" y="217" font-size="9" fill="#333">dog (6)</text>
+        <rect x="210" y="240" width="16" height="25" rx="3" fill="#B0BEC5" opacity="0.85"/>
+        <text x="232" y="257" font-size="9" fill="#999">other (4)</text>
+
+        <!-- T3 nodes (climax - larger) -->
+        <rect x="400" y="25" width="20" height="110" rx="3" fill="#2979FF" opacity="0.85"/>
+        <text x="426" y="85" font-size="9" fill="#333" font-weight="600">person (35)</text>
+        <rect x="400" y="145" width="20" height="65" rx="3" fill="#00C853" opacity="0.85"/>
+        <text x="426" y="183" font-size="9" fill="#333">car (18)</text>
+        <rect x="400" y="220" width="20" height="40" rx="3" fill="#D50000" opacity="0.85"/>
+        <text x="426" y="245" font-size="9" fill="#333">dog (10)</text>
+        <rect x="400" y="270" width="20" height="30" rx="3" fill="#AA00FF" opacity="0.85"/>
+        <text x="426" y="290" font-size="9" fill="#333">bus (5)</text>
+
+        <!-- T4 nodes -->
+        <rect x="580" y="40" width="16" height="75" rx="3" fill="#2979FF" opacity="0.85"/>
+        <text x="602" y="83" font-size="9" fill="#333">person (18)</text>
+        <rect x="580" y="125" width="16" height="50" rx="3" fill="#00C853" opacity="0.85"/>
+        <text x="602" y="155" font-size="9" fill="#333">car (10)</text>
+        <rect x="580" y="185" width="16" height="30" rx="3" fill="#D50000" opacity="0.85"/>
+        <text x="602" y="205" font-size="9" fill="#333">dog (5)</text>
+
+        <!-- T5 nodes -->
+        <rect x="730" y="50" width="16" height="55" rx="3" fill="#2979FF" opacity="0.85"/>
+        <text x="752" y="83" font-size="9" fill="#333">person (10)</text>
+        <rect x="730" y="115" width="16" height="40" rx="3" fill="#00C853" opacity="0.85"/>
+        <text x="752" y="140" font-size="9" fill="#333">car (6)</text>
+
+        <!-- Summary nodes -->
+        <rect x="810" y="55" width="16" height="80" rx="3" fill="#4CAF50" opacity="0.85"/>
+        <text x="805" y="145" text-anchor="middle" font-size="8" fill="#2e7d32" font-weight="600">23 detected</text>
+        <rect x="810" y="190" width="16" height="50" rx="3" fill="#F44336" opacity="0.85"/>
+        <text x="805" y="250" text-anchor="middle" font-size="8" fill="#c62828" font-weight="600">57 missed</text>
+
+        <!-- Links (bezier curves) -->
+        <!-- person flows -->
+        <path d="M66,70 C138,70 138,72 210,72" fill="none" stroke="#2979FF" stroke-width="12" opacity="0.15"/>
+        <path d="M226,72 C313,72 313,80 400,80" fill="none" stroke="#2979FF" stroke-width="16" opacity="0.15"/>
+        <path d="M420,80 C490,80 490,78 580,78" fill="none" stroke="#2979FF" stroke-width="14" opacity="0.15"/>
+        <path d="M596,78 C663,78 663,78 730,78" fill="none" stroke="#2979FF" stroke-width="10" opacity="0.15"/>
+        <path d="M746,78 C778,78 778,90 810,90" fill="none" stroke="#2979FF" stroke-width="8" opacity="0.15"/>
+
+        <!-- car flows -->
+        <path d="M66,140 C138,140 138,155 210,155" fill="none" stroke="#00C853" stroke-width="8" opacity="0.15"/>
+        <path d="M226,155 C313,155 313,177 400,177" fill="none" stroke="#00C853" stroke-width="10" opacity="0.15"/>
+        <path d="M420,177 C490,177 490,150 580,150" fill="none" stroke="#00C853" stroke-width="8" opacity="0.15"/>
+        <path d="M596,150 C663,150 663,135 730,135" fill="none" stroke="#00C853" stroke-width="6" opacity="0.15"/>
+        <path d="M746,135 C778,135 778,100 810,100" fill="none" stroke="#00C853" stroke-width="5" opacity="0.15"/>
+
+        <!-- dog flows -->
+        <path d="M226,212 C313,212 313,240 400,240" fill="none" stroke="#D50000" stroke-width="6" opacity="0.15"/>
+        <path d="M420,240 C490,240 490,200 580,200" fill="none" stroke="#D50000" stroke-width="5" opacity="0.15"/>
+
+        <!-- detected -> missed -->
+        <path d="M826,135 C826,155 826,180 826,190" fill="none" stroke="#F44336" stroke-width="4" opacity="0.2"/>
+
+        <!-- Width scaling indicator -->
+        <line x1="50" y1="308" x2="140" y2="308" stroke="#1976d2" stroke-width="2" opacity="0.4"/>
+        <line x1="180" y1="308" x2="290" y2="308" stroke="#f9a825" stroke-width="2" opacity="0.4"/>
+        <line x1="340" y1="308" x2="480" y2="308" stroke="#d32f2f" stroke-width="3" opacity="0.5"/>
+        <line x1="530" y1="308" x2="640" y2="308" stroke="#7b1fa2" stroke-width="2" opacity="0.4"/>
+        <line x1="690" y1="308" x2="770" y2="308" stroke="#388e3c" stroke-width="2" opacity="0.4"/>
+        <text x="425" y="318" text-anchor="middle" font-size="8" fill="#999">wider = more activity (adaptive time scaling)</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Start -->
+<div class="quickstart">
+  <h2>Quick Start</h2>
+  <div class="qs-grid">
+    <div class="qs-block">
+      <h3>CLI Usage</h3>
+      <div class="qs-code">
+<span class="comment"># Install dependencies</span>
+<span class="cmd">pip install</span> -r requirements.txt
+
+<span class="comment"># Analyze a local video</span>
+<span class="cmd">python3</span> analyze_video.py <span class="url">path/to/video.mp4</span>
+
+<span class="comment"># Analyze a YouTube video</span>
+<span class="cmd">python3</span> analyze_video.py <span class="url">"https://youtube.com/watch?v=..."</span>
+
+<span class="comment"># Custom settings</span>
+<span class="cmd">python3</span> analyze_video.py video.mp4 \
+  --confidence 0.5 \
+  --segments 12 \
+  --sample 3
+      </div>
+    </div>
+    <div class="qs-block">
+      <h3>Web Server</h3>
+      <div class="qs-code">
+<span class="comment"># Start the web UI</span>
+<span class="cmd">python3</span> server.py
+
+<span class="comment"># Opens http://localhost:8888</span>
+<span class="comment"># Paste any YouTube URL and click Analyze</span>
+
+<span class="comment"># Custom port</span>
+<span class="cmd">python3</span> server.py --port 9000
+
+<span class="comment"># Run the demo pipeline</span>
+<span class="cmd">python3</span> pipeline.py
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tech Stack -->
+<div class="stack">
+  <h2>Built With</h2>
+  <div class="stack-logos">
+    <div class="stack-item">PyTorch</div>
+    <div class="stack-item">TorchVision</div>
+    <div class="stack-item">Faster R-CNN</div>
+    <div class="stack-item">OpenCV</div>
+    <div class="stack-item">Plotly</div>
+    <div class="stack-item">Pillow</div>
+    <div class="stack-item">NumPy</div>
+    <div class="stack-item">yt-dlp</div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Video Story Analyzer &mdash; AI-Powered Object Detection &amp; Narrative Visualization</p>
+  <p style="margin-top:6px"><a href="https://github.com/fullfocus/video-story-analyzer">GitHub</a></p>
+</div>
+
+</body>
+</html>
